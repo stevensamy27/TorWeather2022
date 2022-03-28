@@ -32,3 +32,12 @@ def subscribe(request):
 
 
 
+def notification_info(request):
+    """
+    Displays detailed technical information about how the different
+    notification types are triggered.
+    """
+
+    return render(request, 'notification_info.html')
+
+
