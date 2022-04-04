@@ -149,6 +149,43 @@ class CtlUil:
             logging.error(errormsg )
             return False
         
-        
-            
+
+    def is_stable(self, fingerprint):
+        '''
+        Check if a Tor node has the stable flag.
+
+        @type fingerprint: str
+        @param fingerprint: The fingerprint of the router to check
+
+        @rtype: bool
+        @return: True if this router has a valid consensus with the stable
+        flag, false otherwise.
+        '''
+
+        try:
+            desc = self.control.get_network_status(fingerprint)
+            return Flag.Stable in desc.flags
+        except stem.ControllerError:
+            errormsg = "Unable to get router status entry for '%s'" % (fingerprint)
+            logging.error(errormsg)
+            return False
+
+
+    def is_hibernating(self, fingerprint):
+        """
+        Check if the Tor relay with fingerprint C{fingerprint} is hibernating.
+
+        @type fingerprint: str
+        @param fingerprint: The fingerprint of the Tor relay to check.
+
+        @rtype: bool
+        @return: True if the Tor relay has a current descriptor file with
+        the hibernating flag, False otherwise."""
+
+        try:
+            desc = self.control.get_server_descriptor(fingerprint)
+            return desc.hibernating
+        except stem.ControllerError:
+            return False
+    
     pass
